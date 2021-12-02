@@ -7,6 +7,7 @@ if __name__ == '__main__':
     pygame.display.set_caption("Движущийся шар")
     running = True
 
+
     while running:
 
         for event in pygame.event.get():
