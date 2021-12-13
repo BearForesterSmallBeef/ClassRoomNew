@@ -18,7 +18,7 @@ def main():
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Шаблон")
     screen.fill("white")
-    image = load_image('')
+    image = load_image('Робот.png')
     running = True
 
     while running:
@@ -26,6 +26,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                screen.blit(image, event.pos)
 
         pygame.display.flip()
     pygame.quit()
