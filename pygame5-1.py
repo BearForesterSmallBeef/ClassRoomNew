@@ -33,7 +33,7 @@ def main():
     image3 = pygame.transform.scale(image, (200, 200))
     screen.blit(image1, (100, 200))
     screen.blit(image2, (100, 250))
-    screen.blit(image3, (200, 50))
+    screen.blit(image3, (200, 200))
     running = True
 
     while running:

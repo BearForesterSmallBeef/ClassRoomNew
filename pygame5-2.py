@@ -1,6 +1,12 @@
 import os
+import random
 import sys
 import pygame
+
+
+pygame.init()
+size = width, hight = 500, 500
+screen = pygame.display.set_mode(size)
 
 
 def load_image(name, colorkey=None):
@@ -21,29 +27,37 @@ def load_image(name, colorkey=None):
     return image
 
 
+class Bomb(pygame.sprite.Sprite):
+    image = load_image('bomb.png')
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.image = Bomb.image
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(width)
+        self.rect.y = random.randrange(hight)
+
+    def update(self):
+        self.rect = self.rect.move(random.randrange(3) - 1, random.randrange(3) - 1)
+
+
 def main():
-    pygame.init()
-    size = width, hight = 500, 500
-    screen = pygame.display.set_mode(size)
-    pygame.display.set_caption("Шаблон")
-    screen.fill("white")
-    image = load_image('Робот.png', -1)
-    image1 = pygame.transform.scale(image, (200, 100))
-    image2 = pygame.transform.scale(image, (100, 200))
-    image3 = pygame.transform.scale(image, (200, 200))
-    screen.blit(image1, (100, 200))
-    screen.blit(image2, (100, 250))
-    screen.blit(image3, (200, 50))
+    clock = pygame.time.Clock()
+    pygame.display.set_caption("Бомбы")
+    all_sprites = pygame.sprite.Group()
+    sprite = pygame.sprite.Sprite()
+    n = 50
+    for i in range(n):
+        Bomb(all_sprites)
     running = True
-
     while running:
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                screen.blit(image, event.pos)
-
+        screen.fill("white")
+        all_sprites.draw(screen)
+        all_sprites.update()
+        clock.tick(30)
         pygame.display.flip()
     pygame.quit()
 
