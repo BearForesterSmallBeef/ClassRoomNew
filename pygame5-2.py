@@ -5,7 +5,7 @@ import pygame
 
 
 pygame.init()
-size = width, hight = 500, 500
+size = width, hight = 600, 300
 screen = pygame.display.set_mode(size)
 
 
@@ -35,11 +35,10 @@ class Bomb(pygame.sprite.Sprite):
         super().__init__(group)
         self.image = Bomb.image
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(width)
-        self.rect.y = random.randrange(hight)
+        self.rect.x = random.randrange(width - 51)
+        self.rect.y = random.randrange(hight - 50)
 
     def update(self, *args):
-        self.rect = self.rect.move(random.randrange(3) - 1, random.randrange(3) - 1)
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
             self.image = self.image_boom
 
@@ -49,7 +48,7 @@ def main():
     pygame.display.set_caption("Бомбы")
     all_sprites = pygame.sprite.Group()
     sprite = pygame.sprite.Sprite()
-    n = 50
+    n = 20
     for i in range(n):
         Bomb(all_sprites)
     running = True
@@ -59,7 +58,7 @@ def main():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 all_sprites.update(event)
-        screen.fill("white")
+        screen.fill("black")
         all_sprites.draw(screen)
         all_sprites.update()
         clock.tick(30)
