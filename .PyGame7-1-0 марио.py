@@ -119,7 +119,6 @@ def generate_level(level):
 
 
 player, level_x, level_y = generate_level(load_level("levelex.txt"))
-print(box_group)
 
 
 class Camera:
