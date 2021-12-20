@@ -169,7 +169,7 @@ while running:
 
     for sprite in all_sprites:
         camera.apply(sprite)
-#    camera.update(player)
+    camera.update(player)
     screen.fill(pygame.Color(0, 0, 0))
     tiles_group.draw(screen)
     player_group.draw(screen)
