@@ -6,24 +6,46 @@ class Board:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.board = [[1] * height for _ in range(width)]
+        self.board = [[0] * height for _ in range(width)]
         # значения по умолчанию
         self.left, self.top, self.cell_size = 10, 10, 30
         self.cords = (0, 0)
         self.cell = (None, None)
+        self.hod = 1
 
     def render(self, screen):
         for row in range(self.width):
             for col in range(self.height):
+                if self.board[row][col] == 1:
+                    cross = True
+                    circle = False
+                elif self.board[row][col] == -1:
+                    circle = True
+                    cross = False
+                elif self.board[row][col] == 0:
+                    cross = False
+                    circle = False
                 pygame.draw.rect(screen, "white", (self.left + self.cell_size * row,
-                                                   self.top + self.cell_size * col, self.cell_size,
-                                                   self.cell_size), self.board[row][col])
+                                                 self.top + self.cell_size * col, self.cell_size,
+                                                 self.cell_size), 1)
+                if cross:
+                    pygame.draw.line(screen, "blue", (self.left + self.cell_size * row + 1, self.top + self.cell_size * col + 1),
+                                     (self.left + self.cell_size * (row + 1) - 2, self.top + self.cell_size * (col + 1) - 2))
+                    pygame.draw.line(screen, "blue", (self.left + self.cell_size * row + 1, self.top + self.cell_size * (col + 1) - 2),
+                                     (self.left + self.cell_size * (row + 1) - 2, self.top + self.cell_size * col + 1))
+                elif circle:
+                    pygame.draw.circle(screen, "red", (self.left + self.cell_size * row + 1 + self.cell_size // 2 - 1,
+                                                       self.top + self.cell_size * col + 1 + self.cell_size // 2 - 1),
+                                       self.cell_size // 2 - 1, 1)
 
     def set_view(self, left=10, top=10, cell_size=30):
         self.left, self.top, self.cell_size = left, top, cell_size
 
     def on_click(self, cords):
-        self.board[cords[0]][cords[1]] = int(not(self.board[cords[0]][cords[1]]))
+        if cords[0] != None and cords[1] != None:
+            if self.board[cords[0]][cords[1]] == 0:
+                self.hod *= -1
+                self.board[cords[0]][cords[1]] = self.hod
 
     def get_click(self, cords):
         self.cords = cords
@@ -41,7 +63,7 @@ class Board:
 
 
 def main():
-    board = Board(3, 3)
+    board = Board(10, 6)
     board.set_view(100, 100, 50)
     pygame.init()
     size = width, height = 800, 450
