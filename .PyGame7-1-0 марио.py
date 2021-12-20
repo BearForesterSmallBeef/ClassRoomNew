@@ -104,6 +104,7 @@ class Player(pygame.sprite.Sprite):
 
 
 def generate_level(level):
+    x1, x2 = None, None
     new_player, x, y = None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
@@ -113,8 +114,10 @@ def generate_level(level):
                 g = Title("wall", x, y)
                 g.add(box_group)
             elif level[y][x] == "@":
+                x1, x2 = x, y
                 Title("empty", x, y)
-                new_player = Player(x, y)
+    new_player = Player(x1, x2)
+
     return new_player, x, y
 
 
