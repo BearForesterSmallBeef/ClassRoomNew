@@ -15,6 +15,11 @@ all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 box_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
+ogrx, ogry = None, None
+
+
+class LevelError(Exception):
+    pass
 
 
 def load_image(name, color_key=None):
@@ -70,11 +75,15 @@ start_screen()
 
 
 def load_level(filename):
-    filename = "data/" + filename
-    with open(filename, "r") as mapFile:
-        level_map = [line.strip() for line in mapFile]
-    max_width = max(map(len, level_map))
-    return list(map(lambda x: x.ljust(max_width, "."), level_map))
+    try:
+        filename = "data/" + filename
+        with open(filename, "r") as mapFile:
+            level_map = [line.strip() for line in mapFile]
+        max_width = max(map(len, level_map))
+        return list(map(lambda x: x.ljust(max_width, "."), level_map))
+    except Exception:
+        print("Файл с уровнем в папке 'data' файл не найден,\nпроверьте корректномть ввода и наличие файла.")
+        sys.exit()
 
 
 tile_images = {
@@ -104,24 +113,34 @@ class Player(pygame.sprite.Sprite):
 
 
 def generate_level(level):
-    x1, x2 = None, None
-    new_player, x, y = None, None, None
-    for y in range(len(level)):
-        for x in range(len(level[y])):
-            if level[y][x] == ".":
-                Title("empty", x, y)
-            elif level[y][x] == "#":
-                g = Title("wall", x, y)
-                g.add(box_group)
-            elif level[y][x] == "@":
-                x1, x2 = x, y
-                Title("empty", x, y)
+    try:
+        global ogrx, ogry
+        ogrx, ogry = len(level), len(level[0])
+        x1, x2 = None, None
+        new_player, x, y = None, None, None
+        for y in range(len(level)):
+            for x in range(len(level[y])):
+                if level[y][x] == ".":
+                    Title("empty", x, y)
+                elif level[y][x] == "#":
+                    g = Title("wall", x, y)
+                    g.add(box_group)
+                elif level[y][x] == "@":
+                    x1, x2 = x, y
+                    Title("empty", x, y)
+                else:
+                    raise LevelError
+        if x1 is None:
+            raise LevelError
+    except LevelError:
+        print("В файле содержатся некоректные символы или не содержится символ игрока.\nПамятка:\n'.' - пустота\n'@' - игрок\n'#' - ящик")
+        sys.exit()
     new_player = Player(x1, x2)
 
     return new_player, x, y
 
 
-player, level_x, level_y = generate_level(load_level("levelex.txt"))
+player, level_x, level_y = generate_level(load_level(input()))
 
 
 class Camera:
@@ -152,19 +171,23 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 player.rect.x -= STEP
-                if pygame.sprite.spritecollide(player, box_group, False):
+                if pygame.sprite.spritecollide(player, box_group, False) or \
+                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
                     player.rect.x += STEP
             if event.key == pygame.K_RIGHT:
                 player.rect.x += STEP
-                if pygame.sprite.spritecollide(player, box_group, False):
+                if pygame.sprite.spritecollide(player, box_group, False) or \
+                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
                     player.rect.x -= STEP
             if event.key == pygame.K_UP:
                 player.rect.y -= STEP
-                if pygame.sprite.spritecollide(player, box_group, False):
+                if pygame.sprite.spritecollide(player, box_group, False) or \
+                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
                     player.rect.y += STEP
             if event.key == pygame.K_DOWN:
                 player.rect.y += STEP
-                if pygame.sprite.spritecollide(player, box_group, False):
+                if pygame.sprite.spritecollide(player, box_group, False) or \
+                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
                     player.rect.y -= STEP
 
     for sprite in all_sprites:
