@@ -4,6 +4,7 @@ import pygame
 
 pygame.init()
 FPS = 20
+
 WIDTH = 400
 HEIGHT = 300
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
