@@ -6,14 +6,14 @@ pygame.init()
 FPS = 20
 
 WIDTH = 400
-HEIGHT = 300
+HEIGHT = 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 all_sprites = pygame.sprite.Group()
 
 
 def load_image(name, color_key=None):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('куст анимация', name)
     try:
         image = pygame.image.load(fullname)
     except pygame.error as message:
@@ -38,19 +38,27 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.rect = self.rect.move(x, y)
 
     def cut_sheet(self, sheet, columns, rows):
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
-                                sheet.get_height() // rows)
-        for j in range(rows):
-            for i in range(columns):
-                frame_location = (self.rect.w * i, self.rect.h * j)
-                self.frames.append(sheet.subsurface(pygame.Rect(frame_location, self.rect.size)))
+        self.rect = pygame.Rect(0, 0, 261,
+                                300)
+        for i in range(1, 19):
+            frame_location = (0, 0)
+            sheet = load_image(f"{i}.png")
+            self.frames.append(sheet.subsurface(pygame.Rect(frame_location, self.rect.size)))
+        for i in range(5):
+            frame_location = (0, 0)
+            sheet = load_image(f"18.png")
+            self.frames.append(sheet.subsurface(pygame.Rect(frame_location, self.rect.size)))
+        for i in range(18, 0, -1):
+            frame_location = (0, 0)
+            sheet = load_image(f"{i}.png")
+            self.frames.append(sheet.subsurface(pygame.Rect(frame_location, self.rect.size)))
 
     def update(self):
         self.cur_frame = (self.cur_frame + 1) % len(self.frames)
         self.image = self.frames[self.cur_frame]
 
 
-dragon = AnimatedSprite(load_image("dragons.png"), 8, 2, 50, 50)
+dragon = AnimatedSprite(load_image("1.png"), 8, 2, 50, 50)
 
 # Главный Игровой цикл
 running = True

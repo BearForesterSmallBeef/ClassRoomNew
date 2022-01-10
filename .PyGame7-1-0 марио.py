@@ -171,23 +171,24 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 player.rect.x -= STEP
-                if pygame.sprite.spritecollide(player, box_group, False) or \
-                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
+                if pygame.sprite.spritecollide(player, box_group, False) or not \
+                        pygame.sprite.spritecollide(player, all_sprites, False):
                     player.rect.x += STEP
             if event.key == pygame.K_RIGHT:
                 player.rect.x += STEP
-                if pygame.sprite.spritecollide(player, box_group, False) or \
-                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
+                if pygame.sprite.spritecollide(player, box_group, False) or not \
+                        pygame.sprite.spritecollide(player, all_sprites, False):
                     player.rect.x -= STEP
             if event.key == pygame.K_UP:
                 player.rect.y -= STEP
-                if pygame.sprite.spritecollide(player, box_group, False) or \
-                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
+                if pygame.sprite.spritecollide(player, box_group, False) or not \
+                        pygame.sprite.spritecollide(player, all_sprites, False):
                     player.rect.y += STEP
+                    print(player.rect.y)
             if event.key == pygame.K_DOWN:
                 player.rect.y += STEP
-                if pygame.sprite.spritecollide(player, box_group, False) or \
-                        len(pygame.sprite.spritecollide(player, all_sprites, False)) == 1:
+                if pygame.sprite.spritecollide(player, box_group, False) or not \
+                        pygame.sprite.spritecollide(player, all_sprites, False):
                     player.rect.y -= STEP
 
     for sprite in all_sprites:
