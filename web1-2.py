@@ -17,7 +17,7 @@ toponym_adress = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
 toponym_cords = toponym["Point"]["pos"]
 print(toponym_cords)
 
-map_requests = f"http://static-maps.yandex.ru/1.x/?ll={','.join(toponym_cords.split())}8&spn=0.4,0.4&l=map"
+map_requests = f"http://static-maps.yandex.ru/1.x/?ll={','.join(toponym_cords.split())}8&spn=0.04,0.04&l=map"
 response = requests.get(map_requests)
 
 
